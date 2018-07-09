@@ -1,0 +1,8 @@
+ci-server ansible_ssh_host=192.168.33.55
+workstation ansible_ssh_host=192.168.33.58
+
+[ci_server]
+ci-server
+
+[desktop]
+workstation

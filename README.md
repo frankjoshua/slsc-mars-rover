@@ -5,7 +5,7 @@ Install Vargant from http://vagrantup.com
 
 Install git from https://git-scm.com/download/win
 
-Clone the repo ```git clone frankjoshua/slsc-mars-rover```
+Clone the repo ```git clone https://github.com/frankjoshua/slsc-mars-rover.git```
 
 Run ```vagrant up```
 

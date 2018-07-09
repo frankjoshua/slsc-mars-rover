@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>rover_gazebo</name>
+  <version>0.0.1</version>
+  <description>Gazebo simulations for SLSC Mars Rover</description>
+
+  <maintainer email="frankjoshua@gmail.com">Joshua Frank</maintainer>
+
+  <license>Apache 2.0</license>
+
+  <author email="frankjoshua@gmail.com">Joshua Frank</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <exec_depend>ca_description</exec_depend>
+  <exec_depend>gazebo</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+
+  <export></export>
+</package>

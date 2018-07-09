@@ -1,0 +1,9 @@
+{% for item in groups['all'] %}
+{%- if item != 'localhost' %}
+{{ hostvars[item].ansible_ssh_host }}       {{ item }}
+{{ hostvars[item].ansible_ssh_host }}       {{ item }}.tesseractmobile.net
+{{ hostvars[item].ansible_ssh_host }}       {{ item }}.local
+{% endif %}
+{% endfor %}
+
+{{ hostvars[groups['ci_server'][0]].ansible_ssh_host }}       jenkins.slsc.org
