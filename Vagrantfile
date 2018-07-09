@@ -13,16 +13,16 @@ Vagrant.configure("2") do |config|
       vb.gui = false
       # Customize the amount of memory on the VM:
       vb.memory = "512"
-      vb.cpus = 1
+      vb.cpus = 2
     end
     #Ubuntu 18.04
     ci_server.vm.box = "ubuntu/bionic64"
   end
 
-  config.vm.define "pi" do |pi|
-    pi.vm.box = "bearonis/rpi-emulator"
-    pi.vm.box_version = "0.0.1"
-  end
+  # config.vm.define "pi" do |pi|
+  #   pi.vm.box = "bearonis/rpi-emulator"
+  #   pi.vm.box_version = "0.0.1"
+  # end
 
   config.vm.define "workstation" do |workstation|
     workstation.vm.synced_folder "./catkin_ws", "/catkin_ws"
@@ -33,14 +33,14 @@ Vagrant.configure("2") do |config|
       vb.gui = true
       # Customize the amount of memory on the VM:
       vb.memory = "4096"
-      vb.cpus = 6
+      vb.cpus = 4
     end
     # Ubuntu 18.04
     workstation.vm.box = "ubuntu/bionic64"
     # Install lubuntu desktop
     workstation.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
-      sudo apt-get install -y lubuntu-desktop
+      sudo apt-get install -y ubuntu-desktop
       SHELL
   end
 
@@ -52,6 +52,6 @@ Vagrant.configure("2") do |config|
     ansible.galaxy_command = 'ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path}'
     ansible.galaxy_role_file = 'ansible/requirements.yml'
     ansible.playbook = "ansible/playbook.yml"
-    ansible.inventory_path = "ansible/production"
+    ansible.inventory_path = "ansible/staging"
   end
 end
