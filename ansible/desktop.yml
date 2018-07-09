@@ -1,0 +1,67 @@
+---
+- hosts: desktop
+  vars:
+    ros_master_uri: "http://workstation:11311"
+    ros_release: "melodic"
+    ros_package: "desktop-full"
+    catkin_ws: "/catkin_ws"
+  roles:
+    - { name: ansible-role-ros, become: yes }
+  tasks:
+    - name: Setup ROS in .bashrc
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        state: present
+        regexp: '^source /opt/ros/'
+        line: "source /opt/ros/{{ ros_release }}/setup.bash"
+
+    - name: Add ROS master URI to .bashrc
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        state: present
+        regexp: '^export ROS_MASTER_URI'
+        line: "export ROS_MASTER_URI={{ ros_master_uri }}"
+
+    - name: Install catkin tools
+      apt:
+        name: "{{ item }}"
+      loop:
+        - g++
+        - python-catkin-tools
+      become: yes
+
+    # - name: Setup Catkin workspace 
+    #   shell: |
+    #     apt-get update && \
+    #     source /opt/ros/{{ ros_release }}/setup.bash && \
+    #     mkdir -p {{ catkin_ws }}/src && \
+    #     cd {{ catkin_ws }}/src && \
+    #     catkin_init_workspace && \
+    #     cd {{ catkin_ws }}/ && \
+    #     rosdep init && \
+    #     rosdep update && \
+    #     rosdep install --from-paths src -i -y &&\
+    #     catkin_make && \
+    #     echo 'source {{ catkin_ws }}/devel/setup.bash' >> /.bashrc
+    #   args:
+    #     executable: /bin/bash
+    #     creates: "{{ catkin_ws }}/devel/setup.bash"
+    #   become: yes
+    
+    - name: Setup catkin in .bashrc
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        state: present
+        regexp: '^source /catkin_ws/devel'
+        line: "source /catkin_ws/devel/setup.bash"
+
+    - name: Add hg to download gazebo models
+      apt:
+        update_cache: yes
+        name: mercurial
+      become: yes
+
+    - name: Download gazebo models
+      hg:
+        repo: https://bitbucket.org/osrf/gazebo_models
+        dest: /home/vagrant/.gazebo/models

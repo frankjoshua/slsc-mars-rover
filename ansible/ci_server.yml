@@ -1,0 +1,13 @@
+---
+- hosts: ci_server
+  tasks:
+  - name: Jenins container
+    docker_container:
+      name: jenkins
+      image: jenkins/jenkins
+      state: started
+      restart_policy: unless-stopped
+      ports:
+      - "8080:8080"
+      volumes:
+      - /vagrant/data/jenkins_home:/var/jenkins_home

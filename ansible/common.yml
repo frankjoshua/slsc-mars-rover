@@ -1,0 +1,43 @@
+---
+- hosts: all
+  gather_facts: no
+  pre_tasks:
+    - name: Install python2 if not found
+      raw: test -e /usr/bin/python || sudo apt-get -y install python-minimal
+    - name: Gathering facts
+      setup:
+  vars:
+    pip_install_packages:
+      - name: docker
+    docker_apt_release_channel: edge
+  roles:
+    - ansible-role-pip
+    - ansible-role-docker
+  become: yes
+  tasks:
+  - name: Install base software
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - git
+    become: yes
+
+  - name: Add user to docker group
+    user:
+      name: vagrant
+      groups: docker
+
+  #  Not working https://github.com/ansible/ansible/issues/27520
+  # - name: Reset connection so group is applied to user
+  #   meta: reset_connection
+
+- hosts: all
+  gather_facts: True
+  tasks:
+  - name: update /etc/hosts file
+    blockinfile:
+      dest: /etc/hosts
+      content: "{{ lookup('template', 'hosts.j2') }}"
+      state: present
+    become: yes
